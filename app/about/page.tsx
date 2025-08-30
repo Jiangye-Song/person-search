@@ -13,7 +13,7 @@ function ProjectOverview() {
       </CardHeader>
       <CardContent>
         <p className="mb-4">
-          Person Search is a demonstration project showcasing the power of Next.js, React, and modern web technologies. 
+          Person Search is a demonstration project showcasing the power of Next.js, React, and modern web technologies.
           It provides a simple yet effective interface for searching and displaying user information.
         </p>
         <p className="mb-4">
@@ -21,7 +21,7 @@ function ProjectOverview() {
           Prisma with PostgreSQL, and a variety of cutting-edge libraries to create a secure, responsive and accessible user experience.
         </p>
         <p>
-          Key features include secure Google authentication, asynchronous search functionality, server-side filtering, 
+          Key features include secure Google authentication, asynchronous search functionality, server-side filtering,
           persistent data storage, and a dark mode toggle for user comfort.
         </p>
       </CardContent>
@@ -59,7 +59,7 @@ function DeveloperInfo() {
       </CardHeader>
       <CardContent>
         <p className="mb-4">
-          Hi, I&apos;m <code className="relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold">Callum Bir</code>, the developer behind Person Search. I&apos;m passionate about creating 
+          Hi, I&apos;m <code className="relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold">Callum Bir</code>, the developer behind Person Search. I&apos;m passionate about creating
           efficient, user-friendly web applications using the latest technologies.
         </p>
         <p className="mb-4">

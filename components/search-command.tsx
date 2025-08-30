@@ -4,18 +4,7 @@ import * as React from "react"
 import { useCallback, useState, useRef, useEffect } from "react"
 import { Check, Loader2 } from 'lucide-react'
 import { cn } from "@/lib/utils"
-import {
-  Command,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
+import { Input } from "@/components/ui/input"
 
 /**
  * Props for the SearchCommand component
@@ -37,8 +26,8 @@ export interface SearchCommandProps<T> {
 }
 
 /**
- * A reusable search command component that provides an accessible, theme-aware search interface
- * with async search capabilities and keyboard navigation.
+ * A reusable search command component that provides a simple, focus-friendly search interface
+ * with async search capabilities and no focus stealing.
  * 
  * @template T - The type of data being searched
  * 
@@ -64,39 +53,16 @@ export interface SearchCommandProps<T> {
  *   );
  * }
  * 
- * @example
- * // Usage with custom data type
- * interface Product {
- *   sku: string;
- *   title: string;
- *   description: string;
- * }
- * 
- * function ProductSearch() {
- *   return (
- *     <SearchCommand<Product>
- *       onSearch={searchProducts}
- *       onItemSelect={handleProductSelect}
- *       getItemId={(product) => product.sku}
- *       getItemLabel={(product) => product.title}
- *       placeholder="Search products..."
- *       noResultsText="No products found"
- *     />
- *   );
- * }
- * 
  * @features
  * - 🎨 Theme aware (works with light/dark mode)
- * - ⌨️ Keyboard navigation support
  * - 🔍 Async search with loading states
  * - 📱 Responsive design
- * - ♿ Accessible (follows WAI-ARIA practices)
- * - 🔄 Maintains input focus while searching
+ * - 🎯 Focus-friendly (no focus stealing)
+ * - �️ Click and keyboard friendly
  * 
  * @accessibility
- * - Maintains focus on input while typing
+ * - Maintains input focus at all times
  * - Proper ARIA labels and roles
- * - Keyboard navigation support
  * - Screen reader friendly
  */
 export const SearchCommand = <T,>({
@@ -107,25 +73,26 @@ export const SearchCommand = <T,>({
   placeholder = "Search...",
   noResultsText = "No results found.",
 }: SearchCommandProps<T>) => {
-  const [open, setOpen] = useState(false)
   const [items, setItems] = useState<T[]>([])
   const [loading, setLoading] = useState(false)
   const [selectedItem, setSelectedItem] = useState<T | null>(null)
   const [searchQuery, setSearchQuery] = useState("")
+  const [showResults, setShowResults] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
+  const resultsRef = useRef<HTMLDivElement>(null)
 
   const handleSearch = useCallback(async (value: string) => {
     setSearchQuery(value)
-    
-    if (!value) {
+
+    if (!value.trim()) {
       setItems([])
-      setOpen(false)
+      setShowResults(false)
       return
     }
 
     setLoading(true)
-    setOpen(true)
-    
+    setShowResults(true)
+
     try {
       const results = await onSearch(value)
       setItems(results)
@@ -139,92 +106,104 @@ export const SearchCommand = <T,>({
 
   const handleSelect = useCallback((item: T) => {
     setSelectedItem(item)
-    setOpen(false)
+    setShowResults(false)
     setSearchQuery(getItemLabel(item))
     onItemSelect(item)
+
+    // Keep focus on input
+    setTimeout(() => {
+      inputRef.current?.focus()
+    }, 0)
   }, [getItemLabel, onItemSelect])
 
-  // Maintain focus on input when loading state changes
-  useEffect(() => {
-    if (inputRef.current && open) {
-      inputRef.current.focus()
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      setShowResults(false)
     }
-  }, [loading, open])
+  }, [])
+
+  // Close results when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        resultsRef.current &&
+        inputRef.current &&
+        !resultsRef.current.contains(event.target as Node) &&
+        !inputRef.current.contains(event.target as Node)
+      ) {
+        setShowResults(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [])
+
+  const shouldShowResults = showResults && (items.length > 0 || loading) && searchQuery.trim()
 
   return (
     <div className="w-full relative">
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
-          <div>
-            <Command 
-              className="rounded-lg border shadow-md"
-              shouldFilter={false}
-            >
-              <CommandInput 
-                ref={inputRef}
-                placeholder={placeholder}
-                value={searchQuery}
-                onValueChange={handleSearch}
-                onKeyDown={(e) => {
-                  if (e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key === 'Enter') {
-                    e.stopPropagation()
-                  }
-                }}
-                onFocus={() => {
-                  // Re-open results if there are any when input is focused
-                  if (items.length > 0 && searchQuery) {
-                    setOpen(true)
-                  }
-                }}
-                autoFocus={false}
-              />
-            </Command>
-          </div>
-        </PopoverTrigger>
-        <PopoverContent 
-          className="w-[--radix-popover-trigger-width] p-0" 
-          align="start"
-          onOpenAutoFocus={(e) => e.preventDefault()}
-          onCloseAutoFocus={(e) => e.preventDefault()}
+      {/* Search Input */}
+      <Input
+        ref={inputRef}
+        placeholder={placeholder}
+        value={searchQuery}
+        onChange={(e) => handleSearch(e.target.value)}
+        onKeyDown={handleKeyDown}
+        onFocus={() => {
+          // Re-show results if we have them and a query
+          if (items.length > 0 && searchQuery.trim()) {
+            setShowResults(true)
+          }
+        }}
+        className="rounded-lg border shadow-md"
+        autoComplete="off"
+      />
+
+      {/* Results Dropdown */}
+      {shouldShowResults && (
+        <div
+          ref={resultsRef}
+          className="absolute top-full left-0 right-0 z-50 mt-1 bg-background border rounded-lg shadow-lg max-h-80 overflow-y-auto"
+          role="listbox"
+          aria-label="Search results"
         >
-          {(items.length > 0 || loading) && (
-            <Command shouldFilter={false}>
-              <CommandList>
-                <CommandGroup>
-                  {loading ? (
-                    <CommandItem disabled className="flex items-center gap-2 py-6 justify-center">
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                      Searching...
-                    </CommandItem>
-                  ) : items.length === 0 ? (
-                    <CommandItem disabled>{noResultsText}</CommandItem>
-                  ) : (
-                    items.map((item) => (
-                      <CommandItem
-                        key={getItemId(item)}
-                        value={getItemId(item)}
-                        onSelect={() => handleSelect(item)}
-                        onMouseEnter={() => {
-                          // Maintain focus on input when hovering over items
-                          setTimeout(() => inputRef.current?.focus(), 0)
-                        }}
-                      >
-                        <Check
-                          className={cn(
-                            "mr-2 h-4 w-4",
-                            selectedItem && getItemId(selectedItem) === getItemId(item) ? "opacity-100" : "opacity-0"
-                          )}
-                        />
-                        {getItemLabel(item)}
-                      </CommandItem>
-                    ))
+          {loading ? (
+            <div className="flex items-center gap-2 py-6 px-4 justify-center text-muted-foreground">
+              <Loader2 className="h-4 w-4 animate-spin" />
+              Searching...
+            </div>
+          ) : items.length === 0 ? (
+            <div className="py-6 px-4 text-center text-muted-foreground">
+              {noResultsText}
+            </div>
+          ) : (
+            items.map((item) => (
+              <div
+                key={getItemId(item)}
+                className="flex items-center px-4 py-2 cursor-pointer hover:bg-accent hover:text-accent-foreground transition-colors"
+                onClick={() => handleSelect(item)}
+                onMouseDown={(e) => {
+                  // Prevent default to avoid input losing focus
+                  e.preventDefault()
+                }}
+                role="option"
+                aria-selected={selectedItem && getItemId(selectedItem) === getItemId(item) ? true : false}
+              >
+                <Check
+                  className={cn(
+                    "mr-2 h-4 w-4",
+                    selectedItem && getItemId(selectedItem) === getItemId(item) ? "opacity-100" : "opacity-0"
                   )}
-                </CommandGroup>
-              </CommandList>
-            </Command>
+                />
+                {getItemLabel(item)}
+              </div>
+            ))
           )}
-        </PopoverContent>
-      </Popover>
+        </div>
+      )}
     </div>
   )
 }
