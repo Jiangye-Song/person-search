@@ -28,16 +28,16 @@ export function UserForm({ form }: FormComponentProps) {
           <FormItem>
             <FormLabel>Name</FormLabel>
             <FormControl>
-              <Input placeholder="John Doe" {...field} />
+              <Input placeholder="John Doe" {...field} value={field.value || ''} />
             </FormControl>
             <FormDescription>
               Enter full name.
             </FormDescription>
             {fieldState.error && (
-                            <p className="text-red-600 text-sm mt-1">
-                                {String(fieldState.error) || ''}
-                            </p>
-                        ) }
+              <p className="text-red-600 text-sm mt-1">
+                {String(fieldState.error) || ''}
+              </p>
+            )}
           </FormItem>
         )}
       />
@@ -48,16 +48,16 @@ export function UserForm({ form }: FormComponentProps) {
           <FormItem>
             <FormLabel>Email</FormLabel>
             <FormControl>
-              <Input type="email" placeholder="john@example.com" {...field} />
+              <Input type="email" placeholder="john@example.com" {...field} value={field.value || ''} />
             </FormControl>
             <FormDescription>
               Enter email address.
             </FormDescription>
             {fieldState.error && (
-                            <p className="text-red-600 text-sm mt-1">
-                                {String(fieldState.error) || ''}
-                            </p>
-                        ) }
+              <p className="text-red-600 text-sm mt-1">
+                {String(fieldState.error) || ''}
+              </p>
+            )}
           </FormItem>
         )}
       />
@@ -68,16 +68,16 @@ export function UserForm({ form }: FormComponentProps) {
           <FormItem>
             <FormLabel>Phone Number</FormLabel>
             <FormControl>
-              <Input placeholder="04xxxxxxxx" {...field} />
+              <Input placeholder="04xxxxxxxx" {...field} value={field.value || ''} />
             </FormControl>
             <FormDescription>
               Enter phone number in Australian phone number format.
             </FormDescription>
             {fieldState.error && (
-                            <p className="text-red-600 text-sm mt-1">
-                                {String(fieldState.error) || ''}
-                            </p>
-                        ) }
+              <p className="text-red-600 text-sm mt-1">
+                {String(fieldState.error) || ''}
+              </p>
+            )}
           </FormItem>
         )}
       />
