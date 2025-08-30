@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from "react"
-import { useCallback, useState, useRef } from "react"
+import { useCallback, useState, useRef, useEffect } from "react"
 import { Check, Loader2 } from 'lucide-react'
 import { cn } from "@/lib/utils"
 import {
@@ -144,6 +144,13 @@ export const SearchCommand = <T,>({
     onItemSelect(item)
   }, [getItemLabel, onItemSelect])
 
+  // Maintain focus on input when loading state changes
+  useEffect(() => {
+    if (inputRef.current && open) {
+      inputRef.current.focus()
+    }
+  }, [loading, open])
+
   return (
     <div className="w-full relative">
       <Popover open={open} onOpenChange={setOpen}>
@@ -163,6 +170,13 @@ export const SearchCommand = <T,>({
                     e.stopPropagation()
                   }
                 }}
+                onFocus={() => {
+                  // Re-open results if there are any when input is focused
+                  if (items.length > 0 && searchQuery) {
+                    setOpen(true)
+                  }
+                }}
+                autoFocus={false}
               />
             </Command>
           </div>
@@ -171,6 +185,7 @@ export const SearchCommand = <T,>({
           className="w-[--radix-popover-trigger-width] p-0" 
           align="start"
           onOpenAutoFocus={(e) => e.preventDefault()}
+          onCloseAutoFocus={(e) => e.preventDefault()}
         >
           {(items.length > 0 || loading) && (
             <Command shouldFilter={false}>
@@ -189,7 +204,10 @@ export const SearchCommand = <T,>({
                         key={getItemId(item)}
                         value={getItemId(item)}
                         onSelect={() => handleSelect(item)}
-                        onMouseMove={() => inputRef.current?.focus()}
+                        onMouseEnter={() => {
+                          // Maintain focus on input when hovering over items
+                          setTimeout(() => inputRef.current?.focus(), 0)
+                        }}
                       >
                         <Check
                           className={cn(

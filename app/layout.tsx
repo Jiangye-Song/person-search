@@ -5,6 +5,7 @@ import "./globals.css";
 import Navbar from "./components/navbar";
 import Footer from "./components/footer";
 import { ThemeProvider } from "@/components/theme-provider";
+import AuthSessionProvider from "./providers/session-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,22 +32,23 @@ export default function RootLayout({
     <body
       className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
     >          
+      <AuthSessionProvider>
+        <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
 
-<ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
+          <Navbar />
+          <main className="flex-grow">
+            {children}
+          </main>
+          <Toaster />
 
-        <Navbar />
-        <main className="flex-grow">
-          {children}
-        </main>
-        <Toaster />
-
-        <Footer />
-        </ThemeProvider>
+          <Footer />
+          </ThemeProvider>
+      </AuthSessionProvider>
 
     </body>
 

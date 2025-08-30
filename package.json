@@ -9,7 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@auth/prisma-adapter": "^2.10.0",
     "@hookform/resolvers": "^3.9.1",
+    "@prisma/client": "^6.14.0",
     "@radix-ui/react-accordion": "^1.2.2",
     "@radix-ui/react-alert-dialog": "^1.1.4",
     "@radix-ui/react-aspect-ratio": "^1.1.1",
@@ -45,6 +47,7 @@
     "input-otp": "^1.4.1",
     "lucide-react": "^0.469.0",
     "next": "^15.0.0",
+    "next-auth": "^4.24.11",
     "next-themes": "^0.4.4",
     "react": "^19.0.0",
     "react-day-picker": "^8.10.1",
@@ -61,13 +64,19 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@types/next-auth": "^3.15.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.1.2",
     "postcss": "^8",
+    "prisma": "^6.14.0",
     "tailwindcss": "^3.4.1",
+    "tsx": "^4.20.4",
     "typescript": "^5"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
   }
 }
