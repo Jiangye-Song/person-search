@@ -65,7 +65,7 @@ function SocialLinks2() {
         </Link>
       </Button>
       <Button asChild variant="secondary">
-        <Link href="https://x.com/callumbir">
+        <Link href="https://resume.jiangye-song.top">
           <Earth className="mr-2 h-4 w-4" /> Contact Me
         </Link>
       </Button>
