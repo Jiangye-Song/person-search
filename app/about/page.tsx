@@ -62,9 +62,24 @@ function DeveloperInfo() {
           Hi, I&apos;m <code className="relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold">Callum Bir</code>, the developer behind Person Search. I&apos;m passionate about creating
           efficient, user-friendly web applications using the latest technologies.
         </p>
+        <SocialLinks />
+      </CardContent>
+    </Card>
+  )
+}
+
+function MaintainerInfo() {
+  return (
+    <Card className="mb-8">
+      <CardHeader>
+        <CardTitle>About the Maintainer</CardTitle>
+      </CardHeader>
+      <CardContent>
         <p className="mb-4">
-          This project serves as a demonstration of my skills in Next.js, React, Auth.js, Prisma, and modern full-stack development.
-          I&apos;m always looking to learn and improve, so feel free to reach out with any questions or feedback!
+          This is <code className="relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold">Jiangye Song</code>, the maintainer of the Person Search app. I deployed and improved this project for further functionalities. I&apos;m also passionate about creating such kind of web applications using the latest technologies.
+        </p>
+        <p className="mb-4">
+          The modification including connecting to a cloud database, deploying to vercel, adding authentication check for accessing this page, and updating dependencies to the latest versions. I&apos;m always looking to learn and improve, so feel free to reach out with any questions or feedback!
         </p>
         <SocialLinks />
       </CardContent>
@@ -109,6 +124,7 @@ export default async function AboutPage() {
         <h1 className="text-3xl font-bold mb-8">About Person Search</h1>
         <ProjectOverview />
         <DeveloperInfo />
+        <MaintainerInfo />
         <Button asChild variant="link" className="mt-4">
           <Link href="/">
             Back to Home
