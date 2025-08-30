@@ -40,12 +40,12 @@ This creates:
 Update or create `.env` file with your database URLs:
 
 ```env
-# Database URLs
-POSTGRES_URL="postgres://c8f363766f7672525c674f0fcb4e8fa39ded49ad5c64b11e3b5c91813962f368:sk_wLbhlrindcwaeQ7HQ--zn@db.prisma.io:5432/?sslmode=require"
-PRISMA_DATABASE_URL="postgres://c8f363766f7672525c674f0fcb4e8fa39ded49ad5c64b11e3b5c91813962f368:sk_wLbhlrindcwaeQ7HQ--zn@db.prisma.io:5432/?sslmode=require"
+# Database URLs - Replace with your actual credentials
+POSTGRES_URL="postgres://username:password@host:port/database?sslmode=require"
+PRISMA_DATABASE_URL="postgres://username:password@host:port/database?sslmode=require"
 
-# For Prisma Accelerate (if using)
-PRISMA_ACCELERATE_URL="prisma+postgres://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqd3RfaWQiOjEsInNlY3VyZV9rZXkiOiJza193TGJobHJpbmRjd2FlUTdIUS0tem4iLCJhcGlfa2V5IjoiMDFLM0E2TTRTS01SRzI2NlRXUzM3TUpBOUQiLCJ0ZW5hbnRfaWQiOiJjOGYzNjM3NjZmNzY3MjUyNWM2NzRmMGZjYjRlOGZhMzlkZWQ0OWFkNWM2NGIxMWUzYjVjOTE4MTM5NjJmMzY4IiwiaW50ZXJuYWxfc2VjcmV0IjoiMzQ0N2JlMmYtMTU3NC00OWEzLWJmNTktZDVjN2E5NWJjZDI3In0.VhisVqDaFGowXMrwn7ONZflLmmzR2HvemlwNn-_Zddw"
+# For Prisma Accelerate (if using) - Replace with your actual API key
+PRISMA_ACCELERATE_URL="prisma+postgres://accelerate.prisma-data.net/?api_key=YOUR_ACTUAL_API_KEY_HERE"
 ```
 
 ### Step 4: Define Database Schema
