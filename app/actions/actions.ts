@@ -2,15 +2,14 @@
 
 'use server'
 
-import { getServerSession } from "next-auth/next"
-import { authOptions } from "@/lib/auth"
+import { auth } from "@/auth"
 import { revalidatePath } from 'next/cache'
 import { User, userSchema } from './schemas'
 import { cache } from 'react'
 import { prisma } from '@/lib/prisma'
 
 async function requireAuth() {
-    const session = await getServerSession(authOptions)
+    const session = await auth()
     if (!session?.user) {
         throw new Error("Authentication required")
     }
