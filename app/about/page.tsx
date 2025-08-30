@@ -2,7 +2,7 @@ import { auth } from "@/auth"
 import Link from 'next/link'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Github, Linkedin, Twitter } from 'lucide-react'
+import { Github, Linkedin, Twitter, Earth } from 'lucide-react'
 import LoginButton from "../components/auth/login-button"
 
 function ProjectOverview() {
@@ -51,6 +51,28 @@ function SocialLinks() {
   )
 }
 
+function SocialLinks2() {
+  return (
+    <div className="flex flex-wrap gap-4">
+      <Button asChild>
+        <Link href="https://www.linkedin.com/in/jiangye-song-05a54329a/" target="_blank" rel="noopener noreferrer">
+          <Linkedin className="mr-2 h-4 w-4" /> LinkedIn
+        </Link>
+      </Button>
+      <Button asChild variant="outline">
+        <Link href="https://github.com/Jiangye-Song/person-search" target="_blank" rel="noopener noreferrer">
+          <Github className="mr-2 h-4 w-4" /> This repo on GitHub
+        </Link>
+      </Button>
+      <Button asChild variant="secondary">
+        <Link href="https://x.com/callumbir">
+          <Earth className="mr-2 h-4 w-4" /> Contact Me
+        </Link>
+      </Button>
+    </div>
+  )
+}
+
 function DeveloperInfo() {
   return (
     <Card className="mb-8">
@@ -81,7 +103,7 @@ function MaintainerInfo() {
         <p className="mb-4">
           The modification including connecting to a cloud database, deploying to vercel, adding authentication check for accessing this page, and updating dependencies to the latest versions. I&apos;m always looking to learn and improve, so feel free to reach out with any questions or feedback!
         </p>
-        <SocialLinks />
+        <SocialLinks2 />
       </CardContent>
     </Card>
   )
